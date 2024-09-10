@@ -1,29 +1,45 @@
 package io.collective.basic;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
 
 public class Blockchain {
 
+    private final LinkedList<Block> chain = new LinkedList<>();
+
     public boolean isEmpty() {
-        return false;
+        return chain.isEmpty();
     }
 
     public void add(Block block) {
+        chain.add(block);
     }
 
     public int size() {
-        return 0;
+        return chain.size();
     }
 
     public boolean isValid() throws NoSuchAlgorithmException {
+        if (chain.isEmpty()) {
+            return true;
+        }
 
-        // todo - check mined
+        var previousHash = chain.getFirst().getPreviousHash();
 
-        // todo - check previous hash matches
+        if (!previousHash.equals(Block.GENESIS_PREVIOUS_HASH)) {
+            return false;
+        }
 
-        // todo - check hash is correctly calculated
+        for (var block : chain) {
+            if (!isMined(block) || !block.getHash().equals(block.calculatedHash())
+                    || !block.getPreviousHash().equals(previousHash)) {
+                return false;
+            }
 
-        return false;
+            previousHash = block.getHash();
+        }
+
+        return true;
     }
 
     /// Supporting functions that you'll need.

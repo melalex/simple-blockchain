@@ -5,6 +5,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Block {
+
+    public static final String GENESIS_PREVIOUS_HASH = "0";
+
     private final String previousHash;
     private final long timestamp;
     private final int nonce;
@@ -14,7 +17,7 @@ public class Block {
         this.previousHash = previousHash;
         this.timestamp = timestamp;
         this.nonce = nonce;
-        this.hash = null;
+        this.hash = calculatedHash();
     }
 
     public String getPreviousHash() {
@@ -34,7 +37,7 @@ public class Block {
     }
 
     public String calculatedHash() throws NoSuchAlgorithmException {
-        return null;
+        return calculateHash(previousHash + timestamp + nonce);
     }
 
     /// Supporting functions that you'll need.
